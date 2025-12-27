@@ -2,6 +2,7 @@ import React from 'react'
 import prisma from '../../lib/prisma';
 
 const getUsers = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     return await prisma.user.findMany();
 }
 
