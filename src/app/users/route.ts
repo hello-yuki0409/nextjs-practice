@@ -24,5 +24,5 @@ const {name, email, password} = validation.data;
             password,
         },
     });
-    return Response.json(user);
+    return Response.json({user});
 }

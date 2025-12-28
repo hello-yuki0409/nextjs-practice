@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react'
-import ClientComponent from './ClientComponent'
+// import ClientComponent from './ClientComponent'
 import ServerComponent from './ServerComponent'
 
 const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center">
-      <ClientComponent />
+      {/* <ClientComponent /> */}
       <Suspense fallback={<p>loading...</p>}>
       <ServerComponent />
       </Suspense>

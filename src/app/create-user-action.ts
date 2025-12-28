@@ -28,3 +28,21 @@ export const createUserAction = async (data: CreateUserData) => {
 
 return user;
 }
+
+export const createUserActionFormServerComponent = async (
+    FormData: FormData ) => {
+        const userData = Object.fromEntries(FormData.entries())
+
+        const validation = createUserSchema.safeParse(userData)
+        if (!validation.success) {
+            throw new Error("バリデーションエラー");
+}
+
+const {name, email, password} = validation.data;
+    await prisma.user.create({
+        data: {
+            name,
+            email,
+            password,
+        },
+    })};
