@@ -1,6 +1,7 @@
 "use client"
 
 import React, { ChangeEvent, useState } from 'react'
+import { createUserAction } from "./create-user-action"
 
 const ClientComponent = () => {
     const [data, setData] = useState({
@@ -13,15 +14,11 @@ const ClientComponent = () => {
         setData ({...data, [name]: value})
     }
 
-    const onSubmit = () => {
-        fetch("/users", {
-            method: "POST",
-            body: JSON.stringify(data),
-        })
-        .then((response) => response.json()
-        .then((res) => console.log({res})
-        ))
-    }
+    const onSubmit = async () => {
+  const res = await createUserAction(data);
+  console.log(res);
+}
+
 
 return (
     <div>
