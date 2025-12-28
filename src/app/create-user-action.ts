@@ -3,6 +3,11 @@
 import z from "zod";
 import prisma from "../../lib/prisma";
 
+export type CreateUserResult = {
+    success: boolean;
+    message: string;
+}
+
 const createUserSchema = z.object({
     name: z.string().min(1). max(30),
     email: z.string().email(). max(100),
@@ -11,14 +16,19 @@ const createUserSchema = z.object({
 
 type CreateUserData = z.infer<typeof createUserSchema>;
 
-export const createUserAction = async (data: CreateUserData) => {
+export const createUserAction = async (data: CreateUserData): Promise<CreateUserResult> => {
     const validation = createUserSchema.safeParse(data)
     if (!validation.success) {
-        return validation.error;
+        console.error(validation.error)
+        return {
+            success: false,
+            message: "バリデーションエラー",
+        }
     }
 
     const {name, email, password} = validation.data;
-        const user = await prisma.user.create({
+    try {
+        await prisma.user.create({
             data: {
                 name,
                 email,
@@ -26,7 +36,18 @@ export const createUserAction = async (data: CreateUserData) => {
             },
         });
 
-return user;
+return {
+    success: true,
+    message: "ユーザー作成成功",
+}
+}
+catch (err) {
+    console.error(err);
+    return {
+        success: false,
+        message: "ユーザー作成失敗",
+    }
+}
 }
 
 export const createUserActionFormServerComponent = async (
