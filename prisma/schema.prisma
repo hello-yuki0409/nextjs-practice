@@ -2,14 +2,26 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider       = "zod-prisma-types"
+  useMultipleFiles                 = true // default is false
+  writeBarrelFiles                 = false // default is true
+  createInputTypes                 = false // default is true
+  createOptionalDefaultValuesTypes = true // default is false
+  createPartialTypes               = true // default is false
+}
+
 datasource db {
   provider = "postgresql"
 }
 
 model User {
   id Int @id @default(autoincrement())
+  /// @zod.string.email().max(255)
   email String @unique @db.VarChar(255)
+  /// @zod.string.min(1).max(30).regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, { message: "英字を含めてください"}).regex(/[0-9]/, { message: "数字を含めてください"})
   password String
+  /// @zod.string.min(1).max(30)
   name String @db.VarChar(30)
   imageUrl String? @map("image_url")
   createdAt DateTime @default(now()) @map("created_at")
